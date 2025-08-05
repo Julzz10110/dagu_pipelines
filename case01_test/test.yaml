@@ -1,0 +1,19 @@
+name: test
+description: Test description
+steps:
+  - name: proc_get_request
+    executor:
+      type: http
+      config:
+        silent: true
+        headers: []
+    command: GET https://jsonplaceholder.typicode.com/posts
+    output: PROC_GET_REQUEST_DATA
+  - name: proc_json_filter
+    executor: command
+    command: "node -e \"const input =
+      JSON.parse(process.env.PROC_GET_REQUEST_DATA);const result =
+      input.filter(item => {  return item?.id <
+      4;});console.log(JSON.stringify(result.map(item => ({    'body':
+      item?.body  }))));\""
+    output: FILTERED_DATA
